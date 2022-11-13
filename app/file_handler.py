@@ -2,19 +2,11 @@ import pandas as pd
 from fastapi import HTTPException
 
 
-def get_dataframe(path: str) -> pd.DataFrame:
-    try:
-        if path.endswith('.csv'):
-            df = pd.read_csv(path)
-        elif path.endswith('.xlsx'):
-            df = pd.read_excel(path)
-    except Exception as e: 
-        #TODO: Logging needs to be implemented
-        print(f"HTTPException 500 raised: {e}")
-        raise HTTPException(500, "Internal Server Error")
-    return df
-
-def get_synopsis(path: str):
+def get_synopsis(path: str) -> dict:
+    """
+    Collates data needed for synopsis response with the given path
+    Returns the synopsis dictonary 
+    """
     
     df = get_dataframe(path)
 
@@ -37,7 +29,26 @@ def get_synopsis(path: str):
 
     return synopsis
 
+def get_dataframe(path: str) -> pd.DataFrame:
+    """
+    The given path of a csv or xlsx file are attempted to be read by pandas
+    Returns a pandas dataframe
+    """
+    try:
+        if path.endswith('.csv'):
+            df = pd.read_csv(path)
+        elif path.endswith('.xlsx'):
+            df = pd.read_excel(path)
+    except Exception as e: 
+        #TODO: Logging needs to be implemented
+        print(f"HTTPException 500 raised: {e}")
+        raise HTTPException(500, "Internal Server Error")
+    return df
+
 def get_data_type(df_dtype: str) -> str:
+    """
+    Takes the dataframe column datatype and returns its mapped colloquial data type
+    """
     if df_dtype == "int64" or df_dtype == "float64":
         type = "Number"
     elif df_dtype == "datetime64":
@@ -48,6 +59,11 @@ def get_data_type(df_dtype: str) -> str:
     return type
 
 def get_sample(column_values: list) -> list:
+    """
+    Given a list of values, a sample of the list is returned
+    Sample: Uniques values, not null and 5 or less values. 
+    """
+
     # remove duplicate values
     unique_col_values = list(dict.fromkeys(column_values))
 

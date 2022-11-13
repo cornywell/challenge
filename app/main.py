@@ -1,11 +1,11 @@
 from os.path import exists
 
 from fastapi import FastAPI, File, UploadFile, HTTPException
-from file_handler import get_synopsis
+from app.file_handler import get_synopsis
 
 app = FastAPI()
 
-DATA_DIR = "data/"
+DATA_DIR = "app/data/"
 
 @app.post("/upload")
 async def upload_file(file: UploadFile):
