@@ -1,5 +1,13 @@
 Thematic challenge by Kim Cornwell
 
+Run the following to get this development API up and running:
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+
+
 Automatic interactive API documentation:
 
 OpenAPI Documentation at:
